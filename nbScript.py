@@ -15,6 +15,7 @@ print('Disparate Impact Score for Sensitive Feature %d = %.2f'%(si,evaluateBias(
 # artifically induce bias in training data
 p = 0.5
 X_sample,y_sample,s_sample,inds = genBiasedSample(data['features'], data['labels'].flatten(),data['sensitive'][:,si],p)
+
 model = NBC(a=1,b=1,alpha=1)
 y_pred = cross_val_predict(model,X_sample,y_sample,cv=10)
 print('Disparate Impact Score for Sensitive Feature %d = %.2f'%(si,evaluateBias(y_pred,s_sample)))

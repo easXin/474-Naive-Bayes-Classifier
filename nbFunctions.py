@@ -41,63 +41,26 @@ class NBC(BaseEstimator):
         alpha = self.get_alpha()
         self.__classes = np.unique(y)
 
-        # remove next line and implement from here
-        # you are free to use any data structure for paramse
 
+        # compute the formulas of 5 and 6
         n1 = 0
         n2 = 0
         for i in y:
             if i == 1:
-                n1+=1
+                n1+=1 # count the number of n1
             if i == 2:
-                n2+=1
-        totalNum = n1 + n2
+                n2+=1 # count the number of n2
+        total = n1 + n2
+        # the class probability when the Y == 1, refer to 5th formulas
+        print("Y = 1 :" + str((n1 + a) / (total + a + b)))
+        # the class probability when the Y == 1
+        print("Y = 2 :" + str((n2 + a) / (total + a + b)))
+        print("------------------------------------------------")
+        # compute the formulas of 8 and 9
+        for j in X:
+            print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
+                  + "\nY = 2 :" + str((n1 + alpha) / (n1 + j * b)))
 
-        # for j in y:
-        #     if j == 1:
-        #         print("Y = 1 :" + str((n1 + a)/(totalNum + a + b)))
-        #     if j == 2:
-        #         print("Y = 2 :" + str((n2 + a) / (totalNum + a + b)))
-
-        # for i,j in X,y:
-        #     if j == 1:
-        #         print("Y = 1 :" + str((i + alpha) / (totalNum + a + b * alpha)))
-        #     if j == 2:
-        #         print("Y = 2 :" + str((i + alpha) / (totalNum + a + b * alpha)))
-        #
-        print(".................")
-        print(X)
-        print(".................")
-        # for i in X:
-        #     for j in X:
-        #          print(X[i][j])
-                # for k in y:
-                #     if j ==1:
-                #         print("Y = 1 :" + str((X[i][j] + alpha) / (totalNum + a + b * alpha)))
-                #     if j ==2:
-                #         print("Y = 2 :" + str((i + alpha) / (totalNum + a + b * alpha)))
-
-
-
-
-
-        # print(len(X))
-        # print(y.shape[0])
-
-
-        # print("======zzzzzzzzz==========")
-        # print(X.shape)
-        # # print(a)
-        # # print(b)
-        # print(alpha)
-        # print("======xxxxxxxxx==========")
-        # print(y.shape[0])
-        # print("=======ccccccc=========")
-
-        #
-        # #print(params.shape)
-        # print(".................")
-        # do not change the line below
         params = None
         self.__params = params
     
@@ -117,6 +80,7 @@ class NBC(BaseEstimator):
         a = self.get_a()
         b = self.get_b()
         alpha = self.get_alpha()
+
         #remove next line and implement from here
         predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
         #do not change the line below
