@@ -57,10 +57,24 @@ class NBC(BaseEstimator):
         print("Y = 2 :" + str((n2 + a) / (total + a + b)))
         print("------------------------------------------------")
         
-        # compute the formulas of 8 and 9 ------- NEEDS WORK
-        for j in X:
-            print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
-                  + "\nY = 2 :" + str((n2 + alpha) / (n2 + j * b)))
+        # computes the formulas of 8 and 9 ------- NEEDS WORK
+
+        # Return the count of repetitions of unique elements:
+        # EXAMPLE:
+        # First array: [5 2 6 2 7 5 6 8 2 9]
+        # uniques:     [2 5 6 7 8 9]   <--Kj would be length of unique
+        # count:       [3 2 2 1 1 1]
+
+        XT = np.transpose(X)
+        for j in XT: #iterating through each column of X instead of row since its transposed
+            uniques,count = np.unique(m,return_counts = True) 
+            print("Y = 1 : " + str((n1 + alpha) / (n1 + len(uniques) * b))
+                   + "\nY = 2 :" + str((n2 + alpha) / (n2 + len(uniques) * b)))
+            
+
+        # for j in X:
+        #     print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
+        #           + "\nY = 2 :" + str((n2 + alpha) / (n2 + j * b)))
 
         params = None
         self.__params = params
