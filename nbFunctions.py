@@ -42,7 +42,7 @@ class NBC(BaseEstimator):
         self.__classes = np.unique(y)
 
 
-        # compute the formulas of 5 and 6
+        # compute the formulas of 5 and 6 ------ DONE
         n1 = 0
         n2 = 0
         for i in y:
@@ -56,7 +56,8 @@ class NBC(BaseEstimator):
         # the class probability when the Y == 1
         print("Y = 2 :" + str((n2 + a) / (total + a + b)))
         print("------------------------------------------------")
-        # compute the formulas of 8 and 9
+        
+        # compute the formulas of 8 and 9 ------- NEEDS WORK
         for j in X:
             print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
                   + "\nY = 2 :" + str((n1 + alpha) / (n1 + j * b)))
