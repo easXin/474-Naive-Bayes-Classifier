@@ -67,7 +67,7 @@ class NBC(BaseEstimator):
 
         XT = np.transpose(X)
         for j in XT: #iterating through each column of X instead of row since its transposed
-            uniques,count = np.unique(m,return_counts = True) 
+            uniques,count = np.unique(j,return_counts = True) 
             print("Y = 1 : " + str((n1 + alpha) / (n1 + len(uniques) * b))
                    + "\nY = 2 :" + str((n2 + alpha) / (n2 + len(uniques) * b)))
             
