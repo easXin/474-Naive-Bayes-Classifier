@@ -60,7 +60,7 @@ class NBC(BaseEstimator):
         # compute the formulas of 8 and 9 ------- NEEDS WORK
         for j in X:
             print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
-                  + "\nY = 2 :" + str((n1 + alpha) / (n1 + j * b)))
+                  + "\nY = 2 :" + str((n2 + alpha) / (n2 + j * b)))
 
         params = None
         self.__params = params
