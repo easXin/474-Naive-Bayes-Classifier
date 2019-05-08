@@ -42,45 +42,85 @@ class NBC(BaseEstimator):
         self.__classes = np.unique(y)
 
 
-        # compute the formulas of 5 and 6 ------ DONE
-        n1 = 0
-        n2 = 0
+
+
+        y1 = 0
+        y2 = 0
+        N = np.size(X,0)
+        r = np.zeros((1,18))
+        m = np.zeros((1,18))
+
         for i in y:
-            if i == 1:
-                n1+=1 # count the number of n1
-            if i == 2:
-                n2+=1 # count the number of n2
-        total = n1 + n2
-        # the class probability when the Y == 1, refer to 5th formulas
-        print("Y = 1 :" + str((n1 + a) / (total + a + b)))
-        # the class probability when the Y == 1
-        print("Y = 2 :" + str((n2 + a) / (total + a + b)))
-        print("------------------------------------------------")
-        
-        # computes the formulas of 8 and 9 ------- NEEDS WORK
+            if y[i] == 1:
+                y1+=1
+                s=X[i]
+                r=np.vstack((r,s))
+            else:
+                y2 +=1
+                n = X[i]
+                m = np.vstack((m,n))
+        r = np.delete(r,0,0)
+        thetaOnejDict = {
+            "feature 1": {},
+            "feature 2": {},
+            "feature 3": {},
+            "feature 4": {},
+            "feature 5": {},
+            "feature 6": {},
+            "feature 7": {},
+            "feature 8": {},
+            "feature 9": {},
+            "feature 10": {},
+            "feature 11": {},
+            "feature 12": {},
+            "feature 13": {},
+            "feature 14": {},
+            "feature 15": {},
+            "feature 16": {},
+            "feature 17": {},
+            "feature 18": {},
+        }
 
-        # Return the count of repetitions of unique elements:
-        # EXAMPLE:
-        # First array: [5 2 6 2 7 5 6 8 2 9]
-        # uniques:     [2 5 6 7 8 9]   <--Kj would be length of unique
-        # count:       [3 2 2 1 1 1]
+        for i in range(0,18):
+            Kj = len(np.unique([row[i] for row in X]))
+            for xj in range(1,Kj+1):
+                NOnej = len([row[i] for row in r if row[i] ==xj])
+                thetaOnej = (NOnej+alpha)/(y1+(Kj*alpha))
+                thetaOnejDict["feature "+str(1+i)][str(xj)] = thetaOnej
+        thetaTwojDict = {
+            "feature 1": {},
+            "feature 2": {},
+            "feature 3": {},
+            "feature 4": {},
+            "feature 5": {},
+            "feature 6": {},
+            "feature 7": {},
+            "feature 8": {},
+            "feature 9": {},
+            "feature 10": {},
+            "feature 11": {},
+            "feature 12": {},
+            "feature 13": {},
+            "feature 14": {},
+            "feature 15": {},
+            "feature 16": {},
+            "feature 17": {},
+            "feature 18": {},
+        }
+        for i in range(0,18):
+            Kj = len(np.unique([row[i] for row in X]))
+            for xj in range(1,Kj+1):
+                NOnej = len([row[i] for row in r if row[i] ==xj])
+                thetaTwoj = (NOnej+alpha)/(y2+(Kj*alpha))
+                thetaTwojDict["feature "+str(1+i)][str(xj)] = thetaTwoj
 
-        XT = np.transpose(X)
-        for j in XT: #iterating through each column of X instead of row since its transposed
-            uniques,count = np.unique(j,return_counts = True) 
-            print("Y = 1 : " + str((n1 + alpha) / (n1 + len(uniques) * b))
-                   + "\nY = 2 :" + str((n2 + alpha) / (n2 + len(uniques) * b)))
-            
-
-        # for j in X:
-        #     print("Y = 1 : " + str((n1 + alpha) / (n1 + j * b))
-        #           + "\nY = 2 :" + str((n2 + alpha) / (n2 + j * b)))
-
-        params = None
+        theta1 = (y1 +a)/((N)+a+b)
+        theta2 = (y2 +a)/((N)+a+b)
+        params = [theta1, theta2, thetaOnejDict, thetaTwojDict]
         self.__params = params
-    
-    # you need to implement this function
-    # nbPredict
+
+
+
     def predict(self,Xtest):
         '''
         This function returns the predicted class for a given data set
@@ -98,6 +138,8 @@ class NBC(BaseEstimator):
 
         #remove next line and implement from here
         predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
+        for i in params[1][1].values():
+            print(str(float(i)))
         #do not change the line below
         return predictions
         
@@ -114,14 +156,15 @@ def evaluateBias(y_pred,y_sensitive):
     di (disparateimpact): scalar value
     '''
     #remove next line and implement from here
-    numerator, denominator = 0
-    for pred, sens in zip(y_pred, y_sensitive):
-        if pred == 2 and sens != 1:
+    top = 0
+    bottom = 0
+    for i in range(0,len(y_pred)):
+        if y_pred[i] == 2 and y_sensitive[i] != 1:
             top += 1
-        if pred == 2 and sens == 1:
+        if y_pred[i] == 2 and y_sensitive[i] == 1:
             bottom += 1
-    di = numerator/denominator
-    
+    di = top/bottom
+
     
     #do not change the line below
     return di
