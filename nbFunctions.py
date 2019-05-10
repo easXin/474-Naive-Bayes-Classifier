@@ -121,7 +121,7 @@ class NBC(BaseEstimator):
 
 
 
-    def predict(self,Xtest):
+       def predict(self,Xtest):
         '''
         This function returns the predicted class for a given data set
         
@@ -138,29 +138,89 @@ class NBC(BaseEstimator):
 
         #remove next line and implement from here
         predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
+        result = []
         product1 = 1
-        # print(str(float(i)))
-        for i in range(1, 19):  # loop through all features 1-18
-            for j in range(1, len(params[2]["feature " + str(i)]) + 1):
-                product1 *= params[2]["feature " + str(i)][str(j)]
-
         product2 = 1
-        for i in range(1, 19):  # loop through all features 1-18
-            for j in range(1, len(params[3]["feature " + str(i)]) + 1):
-                 product2 *= params[3]["feature " + str(i)][str(j)]
-        nominatorP1 = (params[0] * product1)
-        denominatorP1 = (nominatorP1 + params[1]*product2)
-        yEqualsTo1 =  nominatorP1 + denominatorP1
 
-        nominatorP2 = (params[1] * product2)
-        denominatorP2 = (nominatorP1 +params[1]*product2 )
-        yEqualsTo2 = nominatorP2 + denominatorP2
 
-        print("Y = 1 " + str(yEqualsTo1))
-        print("Y = 2 " + str(yEqualsTo2))
+        for i in predictions:
+            if i == 1:
+                for i in range(1, 19):  # loop through all features 1-18
+                    for j in range(1, len(params[2]["feature " + str(i)]) + 1):
+                        product1 *= params[2]["feature " + str(i)][str(j)]
 
+                product2 = 1
+                for i in range(1, 19):  # loop through all features 1-18
+                    for j in range(1, len(params[3]["feature " + str(i)]) + 1):
+                        product2 *= params[3]["feature " + str(i)][str(j)]
+                nominatorP1 = (params[0] * product1)
+                denominatorP1 = (nominatorP1 + params[1] * product2)
+                yEqualsTo1 = nominatorP1 + denominatorP1
+                # predictions.insert(yEqualsTo1)
+                # np.insert(predictions, yEqualsTo1)
+                result.append(yEqualsTo1)
+            elif i == 2 :
+                for i in range(1, 19):  # loop through all features 1-18
+                    for j in range(1, len(params[2]["feature " + str(i)]) + 1):
+                        product1 *= params[2]["feature " + str(i)][str(j)]
+
+                for i in range(1, 19):  # loop through all features 1-18
+                    for j in range(1, len(params[3]["feature " + str(i)]) + 1):
+                        product2 *= params[3]["feature " + str(i)][str(j)]
+                nominatorP1 = (params[0] * product1)
+                denominatorP1 = (nominatorP1 + params[1] * product2)
+                yEqualsTo1 = nominatorP1 + denominatorP1
+
+                nominatorP2 = (params[1] * product2)
+                denominatorP2 = (nominatorP1 + params[1] * product2)
+                yEqualsTo2 = nominatorP2 + denominatorP2
+                np.append(predictions, yEqualsTo2)
+                result.append(yEqualsTo1)
+                # np.insert(predictions,yEqualsTo2)
+                # predictions.insert(yEqualsTo2)
+
+
+
+        # for i in params[1][1].values():
+        #     print(str(float(i)))
         #do not change the line below
-        return predictions
+        #print(params[3]["feature 1"]['1'])
+        # yEqualsOne = params[0]
+        gYEqualsOne = []
+        # featureList = ["feature 1","feature 2","feature 3","feature 4","feature 5","feature 6","feature 7",
+        #                "feature 8","feature 9","feature 10","feature 11","feature 12","feature 13","feature 14",
+        #                "feature 15","feature 16","feature 17","feature 18"]
+        # numOfFeature = [len(params[3][featureList[0]])]
+        # print(numOfFeature)
+        # for i in range(0,len(featureList)):
+        #     # gYEqualsOne.append(sum(params[3][featureList[0]].values()))
+        #     gYEqualsOne.append(params[3][featureList[0]].values())
+        #numOfFeature = [len(params[3][featureList[0]]['1'])]
+        # print(params[3]["feature 1"]['1'])
+        #gYEqualsOne.append(params[3][featureList[0]]['1'])
+        # print(params[3][featureList[0]]['1'].values())
+        # print(gYEqualsOne)
+        # for j in gYEqualsOne:
+        #     print(j)
+        # print(len(gYEqualsOne))
+        # for i in len(featureList):
+        #     oneOf18Feature = params[3][featureList[i]]
+        #
+        # print(params[3][featureList[0]])
+        # temp = params[3][featureList[0]].values()
+        # print(params[3][featureList[0]].values())
+        # ans = sum(temp)
+        # x = np.sum(params[3][featureList[0]].values())
+        # print(ans)
+        # print(temp)
+
+        # for i, j in temp.iteritems():
+        #     for x in j:
+        #         print(x)
+        # print(params[3]["feature 1"].values())
+
+
+        return result
         
 def evaluateBias(y_pred,y_sensitive):
     '''
