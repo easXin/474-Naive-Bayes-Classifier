@@ -139,17 +139,26 @@ class NBC(BaseEstimator):
         #remove next line and implement from here
         predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
         product1 = 1
-        for i in range(1, 19):#loop through all features 1-18
+        # print(str(float(i)))
+        for i in range(1, 19):  # loop through all features 1-18
             for j in range(1, len(params[2]["feature " + str(i)]) + 1):
                 product1 *= params[2]["feature " + str(i)][str(j)]
-        product2 = 1
-        for i in range(1, 19):#loop through all features 1-18
-            for j in range(1, len(params[3]["feature " + str(i)]) + 1):
-                product2 *= params[3]["feature " + str(i)][str(j)]
 
-        print(product1)
-        print("-----------------------------------")
-        print(product2)
+        product2 = 1
+        for i in range(1, 19):  # loop through all features 1-18
+            for j in range(1, len(params[3]["feature " + str(i)]) + 1):
+                 product2 *= params[3]["feature " + str(i)][str(j)]
+        nominatorP1 = (params[0] * product1)
+        denominatorP1 = (nominatorP1 + params[1]*product2)
+        yEqualsTo1 =  nominatorP1 + denominatorP1
+
+        nominatorP2 = (params[1] * product2)
+        denominatorP2 = (nominatorP1 +params[1]*product2 )
+        yEqualsTo2 = nominatorP2 + denominatorP2
+
+        print("Y = 1 " + str(yEqualsTo1))
+        print("Y = 2 " + str(yEqualsTo2))
+
         #do not change the line below
         return predictions
         
