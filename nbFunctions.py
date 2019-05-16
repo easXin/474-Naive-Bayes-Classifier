@@ -1,3 +1,6 @@
+Skip to content
+ 
+
 from sklearn.base import BaseEstimator
 import numpy as np
 import scipy.stats as stats
@@ -27,7 +30,7 @@ class NBC(BaseEstimator):
         return self.alpha
 
     # you need to implement this function
-    # nbTrain()
+
     def fit(self,X,y):
         '''
         This function does not return anything
@@ -41,87 +44,116 @@ class NBC(BaseEstimator):
         alpha = self.get_alpha()
         self.__classes = np.unique(y)
 
+        # remove next line and implement from here
+        #total number of applicants
+        N = X.shape[0]
 
+        #number of features
+        D = X.shape[1]
 
+        #number of applicants w good credit
+        N1 = 0
 
-        y1 = 0
-        y2 = 0
-        N = np.size(X,0)
-        r = np.zeros((1,18))
-        m = np.zeros((1,18))
+        #number of applicants w bad credit
+        N2 = 0
 
-        for i in y:
+        #matrix of Y==1
+        Y1 = np.zeros((1,18))
+
+        #matrix of Y ==2
+        Y2 = np.zeros((1,18))
+
+        #dividing the number of applicants w good or bad credit
+        for i in range(N):
             if y[i] == 1:
-                y1+=1
-                s=X[i]
-                r=np.vstack((r,s))
+                N1 = N1+1
+                temp = X[i]
+                Y1 = np.vstack((Y1, temp))
             else:
-                y2 +=1
-                n = X[i]
-                m = np.vstack((m,n))
-        r = np.delete(r,0,0)
-        thetaOnejDict = {
-            "feature 1": {},
-            "feature 2": {},
-            "feature 3": {},
-            "feature 4": {},
-            "feature 5": {},
-            "feature 6": {},
-            "feature 7": {},
-            "feature 8": {},
-            "feature 9": {},
-            "feature 10": {},
-            "feature 11": {},
-            "feature 12": {},
-            "feature 13": {},
-            "feature 14": {},
-            "feature 15": {},
-            "feature 16": {},
-            "feature 17": {},
-            "feature 18": {},
+                N2 = N2 +1
+                temp = X[i]
+                Y2 = np.vstack((Y2, temp))
+
+        #removing the first row
+        Y1 = np.delete(Y1,0,axis=0)
+        Y2 = np.delete(Y2,0,axis=0)
+
+        #formula 5 & 6
+        theta1 = (N1 + a)/(N + a + b)
+        theta2 = 1 - theta1
+
+        theta1_list = {
+            "0": {},
+            "1": {},
+            "2": {},
+            "3": {},
+            "4": {},
+            "5": {},
+            "6": {},
+            "7": {},
+            "8": {},
+            "9": {},
+            "10": {},
+            "11": {},
+            "12": {},
+            "13": {},
+            "14": {},
+            "15": {},
+            "16": {},
+            "17": {},
         }
 
-        for i in range(0,18):
-            Kj = len(np.unique([row[i] for row in X]))
-            for xj in range(1,Kj+1):
-                NOnej = len([row[i] for row in r if row[i] ==xj])
-                thetaOnej = (NOnej+alpha)/(y1+(Kj*alpha))
-                thetaOnejDict["feature "+str(1+i)][str(xj)] = thetaOnej
-        thetaTwojDict = {
-            "feature 1": {},
-            "feature 2": {},
-            "feature 3": {},
-            "feature 4": {},
-            "feature 5": {},
-            "feature 6": {},
-            "feature 7": {},
-            "feature 8": {},
-            "feature 9": {},
-            "feature 10": {},
-            "feature 11": {},
-            "feature 12": {},
-            "feature 13": {},
-            "feature 14": {},
-            "feature 15": {},
-            "feature 16": {},
-            "feature 17": {},
-            "feature 18": {},
+        # theta1_list = np.zeros(18)
+        # theta2_list = np.zeros(18)
+        theta2_list = {
+            "0": {},
+            "1": {},
+            "2": {},
+            "3": {},
+            "4": {},
+            "5": {},
+            "6": {},
+            "7": {},
+            "8": {},
+            "9": {},
+            "10": {},
+            "11": {},
+            "12": {},
+            "13": {},
+            "14": {},
+            "15": {},
+            "16": {},
+            "17": {},
         }
-        for i in range(0,18):
-            Kj = len(np.unique([row[i] for row in X]))
-            for xj in range(1,Kj+1):
-                NOnej = len([row[i] for row in r if row[i] ==xj])
-                thetaTwoj = (NOnej+alpha)/(y2+(Kj*alpha))
-                thetaTwojDict["feature "+str(1+i)][str(xj)] = thetaTwoj
 
-        theta1 = (y1 +a)/((N)+a+b)
-        theta2 = (y2 +a)/((N)+a+b)
-        params = [theta1, theta2, thetaOnejDict, thetaTwojDict]
+        #finding the unique values for each feature and computing probability
+        for i in range(18):
+            temp = Y1[i]
+            temp2 = Y2[i]
+            # temp = Y1[i]
+            # temp2 = Y2[i]
+            Kj_2 = len(np.unique(temp2))
+            Kj = len(np.unique(temp))
+
+            for xj in range(Kj):
+                N1_j = len([temp[i] for temp in Y1 if temp[i] == xj])
+                theta1_j = (N1_j + alpha) / (N1 + (Kj * alpha))
+                theta1_list[str(i)][str(xj)] = theta1_j
+
+            for xj_2 in range(Kj_2):
+                N2_j = len([temp2[i] for temp2 in Y2 if temp2[i] == xj_2])
+                theta2_j = (N2_j + alpha) / (N2 + (Kj_2 * alpha))
+                theta2_list[str(i)][str(xj_2)] = theta2_j
+
+
+        #print(theta1_list["0"])
+
+        params = [theta1,theta2,theta1_list,theta2_list,N1,N2]
+        # do not change the line below
         self.__params = params
-
-
-
-       def predict(self,Xtest):
+    
+    # you need to implement this function
+    def predict(self,Xtest):
         '''
         This function returns the predicted class for a given data set
         
@@ -136,75 +168,99 @@ class NBC(BaseEstimator):
         b = self.get_b()
         alpha = self.get_alpha()
 
+        theta1 = params[0]
+        theta2 = params[1]
+        theta1_list = params[2]
+        theta2_list = params[3]
+        N1 = params[4]
+        N2 = params[5]
         #remove next line and implement from here
-        predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
-        result = []
-        product1 = 1
-        product2 = 1
+        #predictions = np.random.choice(self.__classes,np.unique(Xtest.shape[0]))
+
+        N = Xtest.shape[0]
+        predictions = np.zeros(N)
+        prediction_class1 = np.zeros(N)
+        prediction_class2 = np.zeros(N)
+        #numerator_product1 = 1
+        denominator1 = 0
+        denominator2 = 0
+
+        for i in range(N):
+            temp = Xtest[i]
+            numerator_product1 = theta1
+            for j in range(len(temp)):
+                current_feature = str(j)
+                observed_feature = str(temp[j])
+                temp_feature_values = theta1_list.get(current_feature)
+                Kj = len(temp_feature_values)
+
+                if observed_feature in temp_feature_values:
+                    probability = float(temp_feature_values[observed_feature])
+                    numerator_product1 = numerator_product1 * probability
+                else:
+                    temp_prob = alpha/(N1 + Kj*alpha)
+                    numerator_product1 = numerator_product1 * temp_prob
+
+            prediction_class1[i] = numerator_product1
+            denominator1 = numerator_product1
+
+            #numerator1 = theta1 * numerator_product1
+
+            #numerator_product2 = 1
+        for i in range(N):
+            temp = Xtest[i]
+            numerator_product2 = theta2
+
+            for j in range(len(temp)):
+                current_feature = str(j)
+                observed_feature = str(temp[j])
+                temp_feature_values = theta2_list.get(current_feature)
+                Kj = len(temp_feature_values)
+
+                if observed_feature in temp_feature_values:
+                    probability = float(temp_feature_values[observed_feature])
+                    numerator_product2 = numerator_product2 * probability
+                else:
+                    temp_prob = alpha / (N2 + Kj * alpha)
+                    numerator_product2 = numerator_product2 * temp_prob
+
+            prediction_class2[i] = numerator_product2
+            denominator2 = numerator_product2
+
+        for i in range(N):
+            temp1 = prediction_class1[i]
+            temp2 = prediction_class2[i]
+            temp1 = temp1/(denominator1*theta1+denominator2*theta2)
+            temp2 = temp2/(denominator1*theta1 + denominator2*theta2)
+            if temp1 < temp2:
+                predictions[i] = 2
+            else:
+                predictions[i] = 1
 
 
-        for i in predictions:
-            if i == 1:
-                for i in range(1, 19):  # loop through all features 1-18
-                    for j in range(1, len(params[2]["feature " + str(i)]) + 1):
-                        product1 *= params[2]["feature " + str(i)][str(j)]
-
-                product2 = 1
-                for i in range(1, 19):  # loop through all features 1-18
-                    for j in range(1, len(params[3]["feature " + str(i)]) + 1):
-                        product2 *= params[3]["feature " + str(i)][str(j)]
-                nominatorP1 = (params[0] * product1)
-                denominatorP1 = (nominatorP1 + params[1] * product2)
-                yEqualsTo1 = nominatorP1 + denominatorP1
-                result.append(yEqualsTo1)
-            elif i == 2 :
-                for i in range(1, 19):  # loop through all features 1-18
-                    for j in range(1, len(params[2]["feature " + str(i)]) + 1):
-                        product1 *= params[2]["feature " + str(i)][str(j)]
-
-                for i in range(1, 19):  # loop through all features 1-18
-                    for j in range(1, len(params[3]["feature " + str(i)]) + 1):
-                        product2 *= params[3]["feature " + str(i)][str(j)]
-                nominatorP1 = (params[0] * product1)
-                denominatorP1 = (nominatorP1 + params[1] * product2)
-                yEqualsTo1 = nominatorP1 + denominatorP1
-
-                nominatorP2 = (params[1] * product2)
-                denominatorP2 = (nominatorP1 + params[1] * product2)
-                yEqualsTo2 = nominatorP2 + denominatorP2
-                np.append(predictions, yEqualsTo2)
-                result.append(yEqualsTo1)
-                
-
-
-      
-
-        return result
+        return predictions
         
 def evaluateBias(y_pred,y_sensitive):
     '''
-    This function computes the Disparate Impact in the classification predictions (y_pred),
-    with respect to a sensitive feature (y_sensitive).
-    
-    Inputs:
-    y_pred: N length numpy array
-    y_sensitive: N length numpy array
-    
-    Output:
-    di (disparateimpact): scalar value
-    '''
-    #remove next line and implement from here
+        This function computes the Disparate Impact in the classification predictions (y_pred),
+        with respect to a sensitive feature (y_sensitive).
+        Inputs:
+        y_pred: N length numpy array
+        y_sensitive: N length numpy array
+        Output:
+        di (disparateimpact): scalar value
+        '''
+    # remove next line and implement from here
     top = 0
     bottom = 0
-    for i in range(0,len(y_pred)):
+    for i in range(0, len(y_pred)):
         if y_pred[i] == 2 and y_sensitive[i] != 1:
             top += 1
         if y_pred[i] == 2 and y_sensitive[i] == 1:
             bottom += 1
-    di = top/bottom
+    di = top / bottom
 
-    
-    #do not change the line below
+    # do not change the line below
     return di
 
 def genBiasedSample(X,y,s,p,nsamples=1000):
