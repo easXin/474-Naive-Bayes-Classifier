@@ -1,2 +1,2 @@
-# ML_PA3
-This is the our project 3 repo 
+# 474- Probabilistic Methods - Understanding Bias in Machine Learning
+Assignment 3 of CSE 474 based on Naive Bayes Classifier
