@@ -1,2 +1,2 @@
 # 474- Understanding Bias in Machine Learning
-Assignment 3 of CSE 474 based on Naive Bayes Classifier
+CSE 474 Assignment 3, Assignment description can be found in the PDF.
